@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'rensyuuyamaguchi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_18EF191644574B7FAE74791E16F57235 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CBE603152EF446B5A3A6A5555C83C85F }}
