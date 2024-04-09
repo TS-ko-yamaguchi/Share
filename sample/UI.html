@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャットボットWebアプリ</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        #chat-container {
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            background-color: #e0e0e0;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-start;
+        }
+
+        #chat-input {
+            display: flex;
+            padding: 10px;
+        }
+
+        #chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #chat-input button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #chat-input button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-messages">
+            <!-- チャットメッセージはここに追加されます -->
+            <div class="message bot-message">こんにちは！何かお手伝いできることはありますか？</div>
+        </div>
+        <div id="chat-input">
+            <input type="text" placeholder="メッセージを入力してください...">
+            <button type="submit">送信</button>
+        </div>
+    </div>
+    <script>
+    // // チャットボットAPIにメッセージを送信する関数
+    // function sendChatBotMessage(message) {
+    //     // 実際のAPIエンドポイントに置き換える必要があります。
+    //     const apiEndpoint = 'https://your-chatbot-api-endpoint/messages';
+    //     fetch(apiEndpoint, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ message: message })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         // チャットボットからの応答をチャットに追加
+    //         addMessageToChat('bot-message', data.reply);
+    //     })
+    //     .catch((error) => {
+    //         console.error('Error:', error);
+    //         addMessageToChat('bot-message', 'エラーが発生しました。もう一度お試しください。');
+    //     });
+    // }
+
+    // // sendMessage関数を更新
+    // function sendMessage() {
+    //     var inputField = document.querySelector('#chat-input input');
+    //     var message = inputField.value.trim();
+    //     if (message !== "") {
+    //         addMessageToChat('user-message', message);
+    //         inputField.value = ''; // 入力フィールドをクリア
+
+    //         // チャットボットAPIにメッセージを送信
+    //         sendChatBotMessage(message);
+    //     }
+    // }
+
+        // チャットメッセージの送信を処理する関数
+        function sendMessage() {
+            var inputField = document.querySelector('#chat-input input');
+            var message = inputField.value.trim();
+            if (message !== "") {
+                addMessageToChat('user-message', message);
+                inputField.value = ''; // 入力フィールドをクリア
+                // チャットボットからの応答をシミュレート
+                setTimeout(function() {
+                    addMessageToChat('bot-message', 'わからんにゃん');
+                }, 1000);
+            }
+        }
+
+        // チャットエリアにメッセージを追加する関数
+        function addMessageToChat(className, message) {
+            var chatMessages = document.getElementById('chat-messages');
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message', className);
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 最新のメッセージが見えるようにスクロール
+        }
+
+        // 送信ボタンのクリックイベントにsendMessage関数をバインド
+        var sendButton = document.querySelector('#chat-input button');
+        sendButton.addEventListener('click', sendMessage);
+
+        // Enterキーを押したときにもメッセージを送信
+        var inputField = document.querySelector('#chat-input input');
+        inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
