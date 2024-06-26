@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャットボットWebアプリ</title>
+    <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div id="chat-title">FAQチャットボット</div>
+    <div id="chat-container">
+        <div id="chat-messages">
+            <div class="message bot-message">
+                <img class="bot-icon" src="static\images\ai_computer_sousa_robot.png" alt="bot-icon">
+                こんにちは！何かお手伝いできることはありますか？
+            </div>
+        </div>
+        <div id="toggle-summary-container">
+            <input type="checkbox" id="toggle-summary" name="toggle-summary">
+            <label for="toggle-summary">生成AIによる要約を行う</label>
+        </div>
+        <form id="chat-input" onsubmit="sendMessage(event)">
+            <input type="text" placeholder="メッセージを入力してください...">
+            <button type="submit">送信</button>
+        </form>
+    </div>
+    <script>
+        // チャットボットAPIにメッセージを送信する関数
+        function sendChatBotMessage(message, useAI) {
+            const apiEndpoint = 'http://127.0.0.1:5000/api/chat';
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message, useAI: useAI })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // チャットボットからの応答をチャットに追加
+                addMessageToChat('bot-message', data.response);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                addMessageToChat('bot-message', 'エラーが発生しました。もう一度お試しください。');
+            });
+        }
+
+        // チャットメッセージの送信を処理する関数
+        function sendMessage(event) {
+            event.preventDefault();
+            var inputField = document.querySelector('#chat-input input');
+            var message = inputField.value.trim();
+            var useAI = document.querySelector('#toggle-summary').checked;
+            if (message !== "") {
+                addMessageToChat('user-message', message);
+                inputField.value = ''; // 入力フィールドをクリア
+
+                // チャットボットAPIにメッセージを送信
+                sendChatBotMessage(message, useAI);
+            }
+        }
+
+        // チャットエリアにメッセージを追加する関数
+        function addMessageToChat(className, message) {
+            var chatMessages = document.getElementById('chat-messages');
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message', className);
+            
+            if (className === 'bot-message') {
+                messageElement.innerHTML = '<img class="bot-icon" src="static/images/ai_computer_sousa_robot.png" alt="bot-icon">' + message;
+            } else {
+                messageElement.textContent = message;
+            }
+
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 最新のメッセージが見えるようにスクロール
+        }
+
+
+        // 送信ボタンのクリックイベントにsendMessage関数をバインド
+        var sendButton = document.querySelector('#chat-input button');
+        sendButton.addEventListener('click', sendMessage);
+
+        // Enterキーを押したときにもメッセージを送信
+        var inputField = document.querySelector('#chat-input input');
+        inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

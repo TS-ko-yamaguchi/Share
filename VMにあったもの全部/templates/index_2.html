@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+    <div id="chatbot">
+        <div id="chatlogs">
+        <!-- チャットログが表示されます -->
+        </div>
+
+        <div id="chat-interface">
+            <textarea id="chat-input" placeholder="メッセージを入力してください..."></textarea>
+            <button id="send-btn">送信</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://unpkg.com/react/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <script src="/static/chat.js" type="text/babel"></script>
+</body>
+</html>
